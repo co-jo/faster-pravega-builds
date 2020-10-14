@@ -104,7 +104,7 @@ def render_failed():
 parser = argparse.ArgumentParser(description="Pravega Test Runner.")
 parser.add_argument("--src", default=os.getcwd() + "/pravega", help="The local Pravega project directory.")
 parser.add_argument("--dst", default="/home/pravega", help="The directory to mount the project from within the image.")
-parser.add_argument("--image", default="pravega", help="The name of the Pravega image to use.")
+parser.add_argument("--image", default="faster-builds", help="The name of the Pravega image to use.")
 parser.add_argument("--memory", default=4, type=int, help="The amount of memory (in GB) to use.")
 parser.add_argument("--cpus", default=os.cpu_count(), type=int, help="The number of cpus to use.")
 parser.add_argument("--command", help="The file container the commands to run.")
