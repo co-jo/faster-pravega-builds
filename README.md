@@ -8,7 +8,7 @@ Run `python3 run.py --help` to list the available parameters.
 
 Deployment:
 
-* Clone your `pravega` fork as a directory named 'pravega'.
+* Clone your `pravega` fork as a directory named 'pravega'. It should be clone in this directory.
 * You place the command(s) you want to execute in `cmd` (Assumes that a `test` task will be run).
 * Build the Dockerfile: `docker build -t faster-builds` (Assumes the image will be tagged as `faster-builds`) 
 * Run `./run.sh`
