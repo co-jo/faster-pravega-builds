@@ -106,7 +106,7 @@ parser.add_argument("--src", default=os.getcwd() + "/pravega", help="The local P
 parser.add_argument("--dst", default="/home/pravega", help="The directory to mount the project from within the image.")
 parser.add_argument("--image", default="faster-builds", help="The tag/id of the image built using 'Dockerfile'.")
 parser.add_argument("--memory", default=4, type=int, help="The amount of memory (in GB) to use.")
-parser.add_argument("--cpus", default=os.cpu_count(), type=int, help="The number of cpus to use.")
+parser.add_argument("--cpus", default=os.cpu_count(), type=int, help="The number of cpus to use. Defaults to use *all* cpus available.")
 parser.add_argument("--command", help="The file container the commands to run.")
 parser.add_argument("--retries", default=2, type=int, help="The number of times to run the command.")
 
