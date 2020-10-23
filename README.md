@@ -11,7 +11,7 @@ Deployment:
 * Clone your `pravega` fork as a directory named 'pravega'. It should be cloned in this directory.
 * You place the command(s) you want to execute in `cmd` (Assumes that a `test` task will be run).
 * Build the Dockerfile: `docker build -t faster-builds` (Assumes the image will be tagged as `faster-builds`) 
-* Run `./run.sh`
+* Run `python run.py`
 
 Example:
 
@@ -20,5 +20,5 @@ $ git clone https://github.com/co-jo/faster-pravega-builds.git
 $ cd faster-pravega-builds
 $ git clone https://github.com/co-jo/pravega.git
 $ docker build -t faster-builds .
-$ ./run.sh
+$ python run.py
 ```
