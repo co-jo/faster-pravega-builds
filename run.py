@@ -53,25 +53,29 @@ def render(output, process):
     elif not output:
         return True
 
-    package = parse_package(output)
-    if not package:
+    if args.stdout:
+        print(output)
         return True
+    else:
+        package = parse_package(output)
+        if not package:
+            return True
 
-    name = parse_test(output)
-    if not name:
-        return True
+        name = parse_test(output)
+        if not name:
+            return True
    
 
-    status = 'SUCCESS'
-    if 'FAILED' in output:
-        status = 'FAILED'
-        failed(name, package)
-    elif 'SKIPPED' in output:
-        status = 'SKIPPED'
-        skipped(name, package)
-    
-    render_current(name, package, status)
-    return True
+        status = 'SUCCESS'
+        if 'FAILED' in output:
+            status = 'FAILED'
+            failed(name, package)
+        elif 'SKIPPED' in output:
+            status = 'SKIPPED'
+            skipped(name, package)
+        
+        render_current(name, package, status)
+        return True
 
 def render_current(name, package, status):
     global run, args
@@ -100,15 +104,21 @@ def render_failed():
     output = tabulate(table, headers, tablefmt='fancy_grid')
     return output
 
+def command(cmd):
+    data = ''
+    with open(cmd) as f:
+        data = f.read().replace('\n', ';').replace('\;', '')
+    return data
 
 parser = argparse.ArgumentParser(description="Pravega Test Runner.")
-parser.add_argument("--src", default=os.getcwd() + ("\pravega" if os.name == 'posix' else '/pravega'), help="The local Pravega project directory.")
+parser.add_argument("--src", default=os.getcwd() + ("/pravega" if os.name == 'posix' else '\pravega'), help="The local Pravega project directory.")
 parser.add_argument("--dst", default="/home/pravega", help="The directory to mount the project from within the image.")
 parser.add_argument("--image", default="faster-builds", help="The tag/id of the image built using 'Dockerfile'.")
 parser.add_argument("--memory", default=4, type=int, help="The amount of memory (in GB) to use.")
 parser.add_argument("--cpus", default=os.cpu_count(), type=int, help="The number of cpus to use. Defaults to use *all* cpus available.")
-parser.add_argument("--command", help="The file container the commands to run.")
-parser.add_argument("--retries", default=2, type=int, help="The number of times to run the command.")
+parser.add_argument("--command", default='cmd', help="The file container the commands to run.")
+parser.add_argument("--retries", default=5, type=int, help="The number of times to run the command.")
+parser.add_argument("--stdout", default=False, help="Print all output (unprocessed) to stdout.", action='store_true')
 
 args=parser.parse_args()
 
@@ -121,7 +131,7 @@ def execution():
         "--memory", "{}g".format(args.memory),
         "--cpus", str(args.cpus),
         args.image,
-        args.command
+        command(args.command),
         ],
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE)
@@ -129,7 +139,7 @@ def execution():
     print('')
     while True:
         data = process.stdout.readline()
-        output = data.decode('ascii').strip()
+        output = data.decode('utf-8').strip()
         if not render(output, process):
             process.kill()
             break
