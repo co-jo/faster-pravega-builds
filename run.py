@@ -135,6 +135,21 @@ def execution():
             break
     print('')
 
+# Print Configuration.
+table = []
+headers = ['src', 'image', 'memory', 'cpus', 'retries']
+table = [[
+    str(args.src),
+    str(args.image),
+    str(args.memory),
+    str(args.cpus),
+    str(args.retries)
+]]
+
+output = tabulate(table, headers, tablefmt='fancy_grid')
+print(output)
+
+# Main Loop.
 for i in range(args.retries):
     run += 1
     execution()
